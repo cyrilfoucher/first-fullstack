@@ -1,4 +1,4 @@
-import PageHeader from "./../components/common/header/PageHeader.jsx";
+import PageHeader from "../components/common/header/PageHeader.jsx";
 import HeroImage from "../assets/images/carte.jpeg";
 
 function Home() {
