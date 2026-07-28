@@ -11,24 +11,30 @@ const passwordSchema = z
     "Le mot de passe doit contenir au moins un caractère spécial",
   );
 
+const prenomSchema = z
+  .string()
+  .trim()
+  .min(2, "le prénom doit contenir au moins 2 caractères")
+  .max(30, "le prénom ne peut pas contenir plus de 30 caractères");
+
+const nomSchema = z
+  .string()
+  .trim()
+  .min(2, "Le nom doit contenir au moins 2 caractères")
+  .max(50, "Le nom ne peut pas dépasser 50 caractères");
+
+const emailSchema = z
+  .string()
+  .trim()
+  .toLowerCase()
+  .email("Adresse email invalide");
+
 export const registerSchema = z
   .object({
-    prenom: z
-      .string()
-      .trim()
-      .min(2, "Le prénom doit contenir au moins 2 caractères")
-      .max(50, "Le prénom ne peut pas dépasser 50 caractères"),
-
-    nom: z
-      .string()
-      .trim()
-      .min(2, "Le nom doit contenir au moins 2 caractères")
-      .max(50, "Le nom ne peut pas dépasser 50 caractères"),
-
-    email: z.string().trim().toLowerCase().email("Adresse email invalide"),
-
+    prenom: prenomSchema,
+    nom: nomSchema,
+    email: emailSchema,
     motDePasse: passwordSchema,
-
     confirmationMotDePasse: z.string(),
   })
   .refine((data) => data.motDePasse === data.confirmationMotDePasse, {
@@ -37,7 +43,13 @@ export const registerSchema = z
   });
 
 export const loginSchema = z.object({
-  email: z.string().trim().toLowerCase().email("Adresse email invalide"),
+  email: emailSchema,
 
   motDePasse: z.string().min(1, "Le mot de passe est obligatoire"),
+});
+
+export const putMeSchema = z.object({
+  prenom: prenomSchema,
+  nom: nomSchema,
+  email: emailSchema,
 });

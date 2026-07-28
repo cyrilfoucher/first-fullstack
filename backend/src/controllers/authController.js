@@ -53,3 +53,24 @@ export const getMe = (req, res) => {
     email: req.user.email,
   });
 };
+
+export const putMe = async (req, res) => {
+  const { prenom, nom, email } = req.body;
+
+  req.user.prenom = prenom;
+  req.user.nom = nom;
+  req.user.email = email;
+  const emailExiste = await Utilisateur.findOne({ email });
+  if (emailExiste && !emailExiste._id.equals(req.user._id)) {
+    throw new AppError("Un autre compte utilise déjà cette adresse email", 409);
+  }
+  await req.user.save();
+  return res.status(200).json({
+    message: "Modifications effectuées avec succés ",
+    utilisateur: {
+      nom: req.user.nom,
+      prenom: req.user.prenom,
+      email: req.user.email,
+    },
+  });
+};
