@@ -12,10 +12,15 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^6.0.0",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
-    "nodemailer": "^9.0.3"
+    "jsonwebtoken": "^9.0.3",
+    "mailer": "^0.6.7",
+    "mongoose": "^9.8.0",
+    "nodemailer": "^9.0.3",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "nodemon": "^3.1.14"
