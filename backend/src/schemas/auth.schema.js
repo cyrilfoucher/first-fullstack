@@ -44,12 +44,29 @@ export const registerSchema = z
 
 export const loginSchema = z.object({
   email: emailSchema,
-
   motDePasse: z.string().min(1, "Le mot de passe est obligatoire"),
 });
 
 export const putMeSchema = z.object({
   prenom: prenomSchema,
   nom: nomSchema,
+  email: emailSchema,
+});
+
+export const changePasswordSchema = z
+  .object({
+    ancienMotDePasse: passwordSchema,
+    nouveauMotDePasse: passwordSchema,
+    confirmationNouveauMotDePasse: z.string(),
+  })
+  .refine(
+    (data) => data.nouveauMotDePasse === data.confirmationNouveauMotDePasse,
+    {
+      message: "Les mots de passe ne correspondent pas.",
+      path: ["confirmationNouveauMotDePasse"],
+    },
+  );
+
+export const forgotPasswordSchema = z.object({
   email: emailSchema,
 });

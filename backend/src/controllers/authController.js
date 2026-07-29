@@ -74,3 +74,20 @@ export const putMe = async (req, res) => {
     },
   });
 };
+
+export const changePassword = async (req, res) => {
+  const { ancienMotDePasse, nouveauMotDePasse } = req.body;
+  const verificationMDP = await bcrypt.compare(
+    ancienMotDePasse,
+    req.user.motDePasse,
+  );
+  if (!verificationMDP) {
+    throw new AppError("Mot de passe incorrect", 401);
+  }
+  const hashNouveauMDP = await bcrypt.hash(nouveauMotDePasse, 10);
+  req.user.motDePasse = hashNouveauMDP;
+  await req.user.save();
+  return res.status(200).json({ message: "Votre mot de passe a été modifié" });
+};
+
+export const forgotPassword = (req, res) => {};
