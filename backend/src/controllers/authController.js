@@ -4,6 +4,7 @@ import Utilisateur from "../models/Utilisateur.js";
 import bcrypt from "bcrypt";
 import transporter from "../config/mailer.js";
 import generateToken from "../utils/generateToken.js";
+import crypto from "crypto";
 
 export const register = async (req, res) => {
   const { nom, prenom, email, motDePasse } = req.body;
@@ -90,4 +91,36 @@ export const changePassword = async (req, res) => {
   return res.status(200).json({ message: "Votre mot de passe a été modifié" });
 };
 
-export const forgotPassword = (req, res) => {};
+export const forgotPassword = async (req, res) => {
+  const { email } = req.body;
+  const utilisateur = await Utilisateur.findOne({ email });
+  if (!utilisateur) {
+    throw new AppError("Aucun compte ne correspond a cette adresse mail", 404);
+  }
+  const resetToken = crypto.randomBytes(32).toString("hex");
+  console.log(resetToken);
+  const resetPasswordToken = crypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
+  utilisateur.resetPasswordToken = resetPasswordToken;
+  utilisateur.resetPasswordExpire = Date.now() + 15 * 60 * 1000;
+  await utilisateur.save();
+  const resetUrl = `http://localhost:5173/reset-password/${resetToken}`;
+  try {
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: utilisateur.email,
+      subject: "Réinitialisation du mot de passe",
+      text: `Voici votre lien de réinitialisation valable 15mn : ${resetUrl}`,
+    });
+  } catch (error) {
+    utilisateur.resetPasswordToken = undefined;
+    utilisateur.resetPasswordExpire = undefined;
+    await utilisateur.save();
+    throw new AppError("Impossible d'envoyer l'email de réinitialisation", 500);
+  }
+  return res
+    .status(200)
+    .json({ message: "Un email de téinitialisation a été envoyé." });
+};
