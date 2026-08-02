@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import Utilisateur from "../models/Utilisateur.js";
 import AppError from "../utils/AppError.js";
 
-const authMiddleware = async (req, res, next) => {
+export const authMiddleware = async (req, res, next) => {
   try {
     const authHeader = req.header("Authorization");
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -20,4 +20,3 @@ const authMiddleware = async (req, res, next) => {
     next(error);
   }
 };
-export default authMiddleware;

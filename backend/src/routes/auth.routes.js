@@ -1,5 +1,5 @@
 import { Router } from "express";
-import authMiddleware from "../middlewares/authMiddleware.js";
+import { authMiddleware } from "../middlewares/authMiddleware.js";
 import {
   register,
   login,
@@ -7,6 +7,7 @@ import {
   putMe,
   changePassword,
   forgotPassword,
+  resetPassword,
 } from "../controllers/authController.js";
 import { asyncHandler } from "../middlewares/asyncHandler.js";
 import { validate } from "../middlewares/validate.js";
@@ -16,6 +17,7 @@ import {
   putMeSchema,
   changePasswordSchema,
   forgotPasswordSchema,
+  resetPasswordSchema,
 } from "../schemas/auth.schema.js";
 
 const router = Router();
@@ -34,5 +36,11 @@ router.post(
   "/forgot-password",
   validate(forgotPasswordSchema),
   asyncHandler(forgotPassword),
+);
+
+router.post(
+  "/reset-password/:token",
+  validate(resetPasswordSchema),
+  asyncHandler(resetPassword),
 );
 export default router;

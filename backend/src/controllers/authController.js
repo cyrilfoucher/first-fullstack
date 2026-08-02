@@ -124,3 +124,24 @@ export const forgotPassword = async (req, res) => {
     .status(200)
     .json({ message: "Un email de téinitialisation a été envoyé." });
 };
+
+export const resetPassword = async (req, res) => {
+  const token = req.params.token;
+  const { nouveauMotDePasse } = req.body;
+  const verification = crypto.createHash("sha256").update(token).digest("hex");
+  const utilisateur = await Utilisateur.findOne({
+    resetPasswordToken: verification,
+  });
+  if (!utilisateur || utilisateur.resetPasswordExpire <= Date.now()) {
+    throw new AppError(
+      "Le lien de réinitialisation est invalide ou a expiré",
+      400,
+    );
+  }
+  const motDePasseHash = await bcrypt.hash(nouveauMotDePasse, 10);
+  utilisateur.motDePasse = motDePasseHash;
+  utilisateur.resetPasswordToken = undefined;
+  utilisateur.resetPasswordExpire = undefined;
+  await utilisateur.save();
+  return res.status(201).json({ message: "Mot de pass modifier" });
+};

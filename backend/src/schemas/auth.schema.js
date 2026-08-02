@@ -70,3 +70,16 @@ export const changePasswordSchema = z
 export const forgotPasswordSchema = z.object({
   email: emailSchema,
 });
+
+export const resetPasswordSchema = z
+  .object({
+    nouveauMotDePasse: passwordSchema,
+    confirmationNouveauMotDePasse: z.string(),
+  })
+  .refine(
+    (data) => data.nouveauMotDePasse === data.confirmationNouveauMotDePasse,
+    {
+      message: "Les mots de passe ne correspondent pas.",
+      path: ["confirmationNouveauMotDePasse"],
+    },
+  );
