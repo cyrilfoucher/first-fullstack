@@ -10,8 +10,8 @@ export const createProduitSchema = z.object({
     .string()
     .min(15, "Description minimum de 15 caractères.")
     .max(2000, "La description ne peut pas dépasser 2000 caractères."),
-  stock: z.number().min(0, "Le stock ne peut pas être negatif."),
-  prix: z.number().positive("Le prix doit être positif."),
+  stock: z.coerce.number().min(0, "Le stock ne peut pas être negatif."),
+  prix: z.coerce.number().positive("Le prix doit être positif."),
 });
 
 export const updateProduitSchema = createProduitSchema;

@@ -1,6 +1,22 @@
 import Produits from "../models/Produit.js";
 import AppError from "../utils/AppError.js";
 import cloudinary from "../config/cloudinary.js";
+import { Readable } from "stream";
+
+const uploadImage = (buffer) => {
+  return new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      { folder: "produits" },
+      (error, result) => {
+        if (error) {
+          return reject(error);
+        }
+        resolve(result);
+      },
+    );
+    Readable.from(buffer).pipe(stream);
+  });
+};
 
 export const getProduits = async (req, res) => {
   const liste = await Produits.find();
@@ -18,6 +34,7 @@ export const getProduit = async (req, res) => {
 
 export const postProduit = async (req, res) => {
   const { titre, description, prix, stock } = req.body;
+  const imageUpload = await uploadImage(req.file.buffer);
   if (!req.file) {
     throw new AppError("Une image est obligatoire", 400);
   }
@@ -25,7 +42,7 @@ export const postProduit = async (req, res) => {
     titre,
     description,
     prix,
-    image,
+    image: imageUpload.secure_url,
     stock,
   });
   return res.status(201).json({ message: "Produit ajouté", nouveauProduit });
