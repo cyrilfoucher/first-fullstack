@@ -44,7 +44,9 @@ export const login = async (req, res) => {
     throw new AppError("Mauvaise combinaison Email/Mot de passe", 401);
   }
   const token = generateToken(utilisateur);
-  return res.status(200).json({ message: "connexion réussie", token });
+  return res
+    .status(200)
+    .json({ message: "connexion réussie", token, role: utilisateur.role });
 };
 
 export const getMe = (req, res) => {
