@@ -5,6 +5,7 @@ import Login from "../pages/Login";
 import Register from "../pages/Register";
 import NotFound from "../pages/NotFound";
 import Boutique from "../pages/Boutique";
+import Compte from "../pages/Compte.jsx";
 import AdminLayout from "../layouts/AdminLayout.jsx";
 import Dashboard from "../pages/admin/Dashboard.jsx";
 import Produits from "../pages/admin/Produits.jsx";
@@ -20,13 +21,21 @@ function AppRoutes() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/boutique" element={<Boutique />} />
+        <Route
+          path="/compte"
+          element={
+            <ProtectedRoute>
+              <Compte />
+            </ProtectedRoute>
+          }
+        />
       </Route>
       <Route path="*" element={<NotFound />} />
       <Route element={<AdminLayout />}>
         <Route
           path="/admin"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute adminOnly>
               <Dashboard />
             </ProtectedRoute>
           }
@@ -34,7 +43,7 @@ function AppRoutes() {
         <Route
           path="/admin/produits"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute adminOnly>
               <Produits />
             </ProtectedRoute>
           }
@@ -42,7 +51,7 @@ function AppRoutes() {
         <Route
           path="/admin/produits/ajouter"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute adminOnly>
               <AjouterProduit />
             </ProtectedRoute>
           }
@@ -50,7 +59,7 @@ function AppRoutes() {
         <Route
           path="/admin/produits/modifier/:id"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute adminOnly>
               <ModifierProduit />
             </ProtectedRoute>
           }
