@@ -7,7 +7,7 @@ function Boutique() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [produits, setProduits] = useState([]);
-  const { panier, setPanier } = useContext(CartContext);
+  const { ajouterAuPanier } = useContext(CartContext);
   useEffect(() => {
     async function chargerProduits() {
       setError("");
@@ -27,35 +27,6 @@ function Boutique() {
   if (loading) {
     return <p>Chargement...</p>;
   }
-  function ajouterAuPanier(produit) {
-    const itemExistant = panier.find((item) => item.produit._id === produit._id);
-
-    if (itemExistant) {
-      setPanier(
-        panier.map((item) => {
-          if (item.produit._id === produit._id) {
-            return {
-              ...item,
-              quantite: item.quantite + 1,
-            };
-          }
-
-          return item;
-        })
-      );
-
-      return;
-    }
-
-    setPanier([
-      ...panier,
-      {
-        produit,
-        quantite: 1,
-      },
-    ]);
-  }
-  console.log(panier);
   return (
     <>
       <PageHeader title="Boutique" />

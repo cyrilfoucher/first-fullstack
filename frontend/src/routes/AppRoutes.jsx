@@ -12,6 +12,7 @@ import Produits from "../pages/admin/Produits.jsx";
 import AjouterProduit from "../pages/admin/AjouterProduit.jsx";
 import ModifierProduit from "../pages/admin/ModifierProduit.jsx";
 import ProtectedRoute from "./ProtectedRoute.jsx";
+import Panier from "../pages/Panier.jsx";
 
 function AppRoutes() {
   return (
@@ -21,6 +22,7 @@ function AppRoutes() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/boutique" element={<Boutique />} />
+        <Route path="/panier" element={<Panier />} />
         <Route
           path="/compte"
           element={
