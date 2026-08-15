@@ -38,6 +38,8 @@ function NavbarActions() {
           <NavLink to="/register">S'enregistrer</NavLink>
         </>
       )}
+
+      <SearchBar />
       <NavLink to="/panier" className="relative">
         <HiOutlineShoppingCart className="text-3xl" />
 
@@ -47,8 +49,6 @@ function NavbarActions() {
           </span>
         )}
       </NavLink>
-
-      <SearchBar />
     </>
   );
 }

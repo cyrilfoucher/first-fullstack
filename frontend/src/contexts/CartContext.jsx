@@ -1,4 +1,5 @@
 import { createContext, useState } from "react";
+import { toast } from "react-toastify";
 
 const CartContext = createContext();
 
@@ -16,11 +17,10 @@ export function CartProvider({ children }) {
               quantite: item.quantite + 1,
             };
           }
-
           return item;
         })
       );
-
+      toast.info(`Vous avez augmenter la quantité de ${produit.titre}`);
       return;
     }
 
@@ -31,6 +31,7 @@ export function CartProvider({ children }) {
         quantite: 1,
       },
     ]);
+    toast.success(`${produit.titre} ajouté au panier`);
   }
   function removeProduit(produit) {
     const itemExistant = panier.find((item) => item.produit._id === produit._id);
@@ -50,16 +51,20 @@ export function CartProvider({ children }) {
           return item;
         })
       );
+      toast.warning(`Vous avez diminuer la quantité de ${produit.titre}`);
 
       return;
     }
   }
   function deleteProduit(produit) {
     setPanier(panier.filter((item) => item.produit._id !== produit._id));
+    toast.error(`Vous avez supprimé ${produit.titre} de votre panier`);
   }
   function clearPanier() {
     setPanier([]);
+    toast.info("Vous avez vidé votre panier");
   }
+
   return (
     <CartContext.Provider
       value={{ panier, setPanier, ajouterAuPanier, removeProduit, deleteProduit, clearPanier }}
