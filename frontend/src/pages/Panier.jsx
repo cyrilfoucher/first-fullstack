@@ -1,6 +1,8 @@
 import { useContext } from "react";
 import CartContext from "../contexts/CartContext";
 import PageHeader from "../components/common/header/PageHeader";
+import commande from "../services/commande.service.js";
+import { toast } from "react-toastify";
 
 function Panier() {
   const { panier, removeProduit, deleteProduit, ajouterAuPanier, clearPanier } =
@@ -18,6 +20,20 @@ function Panier() {
       </>
     );
   }
+  async function commander() {
+    try {
+      await commande({ panier: panier });
+      clearPanier();
+      toast.success("Commande enregistrée");
+    } catch (error) {
+      if (error.response.status === 401) {
+        toast.error("Veuillez vous connecter pour passer une commande.");
+      } else {
+        toast.error(error.response.data.message);
+      }
+    }
+  }
+
   return (
     <>
       <PageHeader title="Mon panier" />
@@ -74,7 +90,10 @@ function Panier() {
             >
               Vider le panier
             </button>
-            <button className="px-6 py-3 rounded bg-amber-800 text-white hover:bg-amber-700">
+            <button
+              onClick={commander}
+              className="px-6 py-3 rounded bg-amber-800 text-white hover:bg-amber-700"
+            >
               Commander
             </button>
           </div>
