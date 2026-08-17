@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import CartContext from "../contexts/CartContext";
 import PageHeader from "../components/common/header/PageHeader";
-import commande from "../services/commande.service.js";
+import { commande } from "../services/commande.service.js";
 import { toast } from "react-toastify";
 
 function Panier() {

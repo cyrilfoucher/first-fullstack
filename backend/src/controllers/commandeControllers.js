@@ -38,3 +38,12 @@ export const createCommande = async (req, res) => {
     .status(201)
     .json({ message: "Votre commande a bien été prise en compte", commande });
 };
+export const getCommandes = async (req, res) => {
+  const commandes = await Commande.find({
+    utilisateur: req.user._id,
+  }).populate("produits.produit");
+  if (commandes.length === 0) {
+    return res.status(404).json({ message: "Aucun commande trouvée" });
+  }
+  return res.status(200).json(commandes);
+};

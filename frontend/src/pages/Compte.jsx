@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import api from "../api/axios.js";
 import PageHeader from "../components/common/header/PageHeader.jsx";
 import ModifierCompteForm from "../components/compte/ModifierCompteForm.jsx";
+import { Link } from "react-router-dom";
 
 function Compte() {
   const [utilisateur, setUtilisateur] = useState(null);
@@ -51,6 +52,9 @@ function Compte() {
           >
             Modifier mes informations
           </button>
+          <Link to="/mes-commandes" className="border rounded-lg bg-amber-50 p-4 mt-2 ">
+            Mes commandes
+          </Link>
         </div>
       )}
     </>

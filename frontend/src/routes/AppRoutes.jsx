@@ -13,6 +13,7 @@ import AjouterProduit from "../pages/admin/AjouterProduit.jsx";
 import ModifierProduit from "../pages/admin/ModifierProduit.jsx";
 import ProtectedRoute from "./ProtectedRoute.jsx";
 import Panier from "../pages/Panier.jsx";
+import MesCommandes from "../pages/MesCommandes.jsx";
 
 function AppRoutes() {
   return (
@@ -28,6 +29,14 @@ function AppRoutes() {
           element={
             <ProtectedRoute>
               <Compte />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/mes-commandes"
+          element={
+            <ProtectedRoute>
+              <MesCommandes />
             </ProtectedRoute>
           }
         />
