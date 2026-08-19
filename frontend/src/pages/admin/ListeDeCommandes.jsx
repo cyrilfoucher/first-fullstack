@@ -7,6 +7,7 @@ function ListeDeCommandes() {
   const [statutSelectionne, setStatutSelectionne] = useState({});
   const [recherche, setRecherche] = useState("");
   const [filtreStatut, setFiltreStatut] = useState("Tous");
+  const [ordreDate, setOrdreDate] = useState("recentes");
   useEffect(() => {
     async function recupCommandes() {
       const commandes = await getAdminCommandes();
@@ -54,6 +55,17 @@ function ListeDeCommandes() {
               </select>
             </div>
           </div>
+          <div className="w-64 p-1">
+            <label className="block font-semibold mb-2">Trier par date</label>
+            <select
+              value={ordreDate}
+              onChange={(e) => setOrdreDate(e.target.value)}
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:border-amber-800"
+            >
+              <option value="recentes">Plus récentes</option>
+              <option value="anciennes">Plus anciennes</option>
+            </select>
+          </div>
         </div>
         {commandes
           .filter((liste) => {
@@ -64,6 +76,12 @@ function ListeDeCommandes() {
               return true;
             }
             return liste.statut === filtreStatut;
+          })
+          .sort((a, b) => {
+            if (ordreDate === "recentes") {
+              return new Date(b.createdAt) - new Date(a.createdAt);
+            }
+            return new Date(a.createdAt) - new Date(b.createdAt);
           })
           .map((liste) => (
             <div key={liste._id} className="border rounded-xl border-amber-800 shadow-mb mb-6 p-6">
