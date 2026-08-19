@@ -14,6 +14,7 @@ import ModifierProduit from "../pages/admin/ModifierProduit.jsx";
 import ProtectedRoute from "./ProtectedRoute.jsx";
 import Panier from "../pages/Panier.jsx";
 import MesCommandes from "../pages/MesCommandes.jsx";
+import ListeDeCommandes from "../pages/admin/ListeDeCommandes.jsx";
 
 function AppRoutes() {
   return (
@@ -42,6 +43,7 @@ function AppRoutes() {
         />
       </Route>
       <Route path="*" element={<NotFound />} />
+
       <Route element={<AdminLayout />}>
         <Route
           path="/admin"
@@ -72,6 +74,14 @@ function AppRoutes() {
           element={
             <ProtectedRoute adminOnly>
               <ModifierProduit />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/commandes"
+          element={
+            <ProtectedRoute adminOnly>
+              <ListeDeCommandes />
             </ProtectedRoute>
           }
         />
