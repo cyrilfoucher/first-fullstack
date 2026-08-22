@@ -54,7 +54,7 @@ export const putProduit = async (req, res) => {
   const produit = await Produits.findByIdAndUpdate(
     id,
     { titre, description, prix, image, stock },
-    { new: true },
+    { returnDocument: "after" },
   );
   produit.titre = titre;
   produit.description = description;
