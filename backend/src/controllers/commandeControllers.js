@@ -43,7 +43,7 @@ export const getCommandes = async (req, res) => {
     utilisateur: req.user._id,
   }).populate("produits.produit");
   if (commandes.length === 0) {
-    return res.status(404).json({ message: "Aucun commande trouvée" });
+    return res.status(200).json({ commandes });
   }
   return res.status(200).json(commandes);
 };

@@ -18,7 +18,7 @@ function Login() {
       localStorage.setItem("token", response.token);
       localStorage.setItem("role", response.role);
       if (response.role === "admin") {
-        navigate("/admin");
+        navigate("/admin/produits");
       } else {
         navigate("/compte");
       }
@@ -56,7 +56,7 @@ function Login() {
             type="submit"
             className="border rounded-lg bg-amber-50 p-4 mt-2 "
           >
-            {loading ? "Chargement" : "Se connecter"}
+            {loading ? "Connexion.." : "Se connecter"}
           </button>
         </form>
       </div>

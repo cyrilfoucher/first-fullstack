@@ -27,6 +27,12 @@ function Boutique() {
   if (loading) {
     return <p>Chargement...</p>;
   }
+  if (error) {
+    return <p className="font semibold text-red-500">{error}</p>;
+  }
+  if (produits.length === 0) {
+    return <p>Aucun produit disponible</p>;
+  }
   return (
     <>
       <PageHeader title="Boutique" />
@@ -41,18 +47,17 @@ function Boutique() {
             <img
               src={produit.image}
               alt={produit.titre}
-              className="h-100 w-80 object-cover rounded p-4 mx-auto  "
+              className="h-96 w-80 object-cover rounded p-4 mx-auto  "
             />
-            <p className="text-lg font-bold">{produit.prix} €</p>
+            <p className="text-lg font-bold">{produit.prix.toFixed(2)} €</p>
             <button
               onClick={() => ajouterAuPanier(produit)}
-              className="rounded-lg p-4 mt-2 hover:scale-105 bg-amber-800"
+              className="rounded-lg text-white p-4 mt-2 hover:scale-105 bg-amber-800"
             >
               Ajouter au panier
             </button>
           </div>
         ))}
-        {error && <p className="font semi-bold text-red-500">{error}</p>}
       </div>
     </>
   );

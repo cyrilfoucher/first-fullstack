@@ -1,13 +1,13 @@
 import { Outlet } from "react-router-dom";
 import SideBar from "../components/layouts/SideBar.jsx";
-import PageHeader from "../components/common/header/PageHeader.jsx";
 
 function AdminLayout() {
   return (
-    <div>
-      <PageHeader />
+    <div className="flex">
       <SideBar />
-      <Outlet />
+      <div className="flex-1 p-8">
+        <Outlet />
+      </div>
     </div>
   );
 }

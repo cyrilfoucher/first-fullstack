@@ -3,14 +3,45 @@ import { getCommandes } from "../services/commande.service.js";
 import PageHeader from "../components/common/header/PageHeader.jsx";
 
 function MesCommandes() {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const [commandes, setCommandes] = useState([]);
   useEffect(() => {
     async function chargerCommandes() {
-      const commandes = await getCommandes();
-      setCommandes(commandes);
+      try {
+        setLoading(true);
+
+        const commandes = await getCommandes();
+        setCommandes(commandes);
+      } catch (error) {
+        console.log(error);
+        setError("Une erreur est survenue");
+      } finally {
+        setLoading(false);
+      }
     }
     chargerCommandes();
   }, []);
+  if (loading) {
+    return <p>Chargement...</p>;
+  }
+  if (error) {
+    return (
+      <>
+        <PageHeader title="Mes commandes" />
+        <p className="text-red-500">{error}</p>
+      </>
+    );
+  }
+  if (commandes.length === 0) {
+    return (
+      <>
+        <PageHeader title="Mes commandes" />
+        <p>Aucune commande pour le moment</p>
+      </>
+    );
+  }
+
   return (
     <>
       <PageHeader title="Mes commandes" />
@@ -45,7 +76,7 @@ function MesCommandes() {
                     <img
                       src={listeP.produit.image}
                       alt={listeP.produit.description}
-                      className="w-24 h-27 object-cover rounded-md"
+                      className="w-24 h-28 object-cover rounded-md"
                     />
                     <div className="flex-1 ml-4">
                       <p className="font-semibold mb-2">{listeP.produit.titre}</p>

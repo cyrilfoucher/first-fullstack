@@ -34,10 +34,10 @@ export const getProduit = async (req, res) => {
 
 export const postProduit = async (req, res) => {
   const { titre, description, prix, stock } = req.body;
-  const imageUpload = await uploadImage(req.file.buffer);
   if (!req.file) {
     throw new AppError("Une image est obligatoire", 400);
   }
+  const imageUpload = await uploadImage(req.file.buffer);
   const nouveauProduit = await Produits.create({
     titre,
     description,

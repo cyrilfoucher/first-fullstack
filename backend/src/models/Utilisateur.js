@@ -4,10 +4,12 @@ const utilisateurSchema = new mongoose.Schema({
   prenom: {
     type: String,
     required: true,
+    trim: true,
   },
   nom: {
     type: String,
     required: true,
+    trim: true,
   },
   role: {
     type: String,
@@ -18,6 +20,8 @@ const utilisateurSchema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
+    lowercase: true,
+    trim: true,
   },
   motDePasse: {
     type: String,

@@ -7,13 +7,27 @@ import { Link } from "react-router-dom";
 function Compte() {
   const [utilisateur, setUtilisateur] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [error, setError] = useState("");
   useEffect(() => {
     const chargerCompte = async () => {
-      const response = await api.get("/auth/me");
-      setUtilisateur(response.data);
+      try {
+        const response = await api.get("/auth/me");
+        setUtilisateur(response.data);
+      } catch (error) {
+        console.log(error);
+        setError("Une erreur est survenue lors du chargement");
+      }
     };
     chargerCompte();
   }, []);
+  if (error) {
+    return (
+      <>
+        <PageHeader title="Mon compte" />
+        <p className="text-red-500">{error}</p>
+      </>
+    );
+  }
   if (!utilisateur) {
     return (
       <>
@@ -22,6 +36,7 @@ function Compte() {
       </>
     );
   }
+
   const prenom = utilisateur.prenom;
   const nom = utilisateur.nom;
   return (
@@ -34,7 +49,7 @@ function Compte() {
           updateUtilisateur={setUtilisateur}
         />
       ) : (
-        <div className="flex flex-col mx-auto max-w-md bg-amber-800 rounded-2xl text-center gap-4 p-4 px-6 py-12 mb-12">
+        <div className="flex flex-col mx-auto max-w-md bg-amber-800 rounded-2xl text-center gap-4 p-4 px-6 mb-12 mt-10 py-10">
           <h2 className="text-xl font-bold ">Bonjour {prenom} !</h2>
           <p className="font-bold">Voici tes informations personnelles :</p>
           <p>

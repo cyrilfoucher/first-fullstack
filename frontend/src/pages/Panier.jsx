@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import CartContext from "../contexts/CartContext";
 import PageHeader from "../components/common/header/PageHeader";
 import { commande } from "../services/commande.service.js";
@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 function Panier() {
   const { panier, removeProduit, deleteProduit, ajouterAuPanier, clearPanier } =
     useContext(CartContext);
+  const [loadingCommande, setLoadingCommande] = useState(false);
 
   const prixTotal = panier.reduce((total, item) => total + item.produit.prix * item.quantite, 0);
   if (panier.length === 0) {
@@ -22,16 +23,33 @@ function Panier() {
   }
   async function commander() {
     try {
+      setLoadingCommande(true);
       await commande({ panier: panier });
       clearPanier();
       toast.success("Commande enregistrée");
     } catch (error) {
-      if (error.response.status === 401) {
+      if (error.response?.status === 401) {
         toast.error("Veuillez vous connecter pour passer une commande.");
       } else {
-        toast.error(error.response.data.message);
+        toast.error(error.response?.data?.message || "Une erreur est survenue.");
       }
+    } finally {
+      setLoadingCommande(false);
     }
+  }
+  function supprimerProduit(produit) {
+    const confirmation = window.confirm(
+      "Êtes-vous sûr de vouloir supprimer ce produit du panier ?"
+    );
+    if (!confirmation) return;
+    deleteProduit(produit);
+  }
+  function viderPanier() {
+    const confirmation = window.confirm("Êtes-vous sûr de vouloir vider le panier ?");
+
+    if (!confirmation) return;
+
+    clearPanier();
   }
 
   return (
@@ -51,7 +69,9 @@ function Panier() {
             />
             <div className="flex-1 text-center md:text-left">
               <h2 className="text-2xl font-bold">{item.produit.titre}</h2>
-              <p className="text-lg font-semibold text-amber-800 mt-2">{item.produit.prix} €</p>
+              <p className="text-lg font-semibold text-amber-800 mt-2">
+                {item.produit.prix.toFixed(2)} €
+              </p>
               <p className="mt-4">
                 Quantité : <strong>{item.quantite}</strong>
               </p>
@@ -73,7 +93,7 @@ function Panier() {
                 -
               </button>
               <button
-                onClick={() => deleteProduit(item.produit)}
+                onClick={() => supprimerProduit(item.produit)}
                 className="px-4 py-2 rounded bg-red-600 text-white hover:bg-red-700"
               >
                 Supprimer
@@ -85,16 +105,17 @@ function Panier() {
           <h2 className="text-3xl font-bold">Total : {prixTotal.toFixed(2)} €</h2>
           <div className="flex gap-4">
             <button
-              onClick={clearPanier}
+              onClick={viderPanier}
               className="px-6 py-3 rounded bg-gray-500 text-white hover:bg-gray-600"
             >
               Vider le panier
             </button>
             <button
               onClick={commander}
-              className="px-6 py-3 rounded bg-amber-800 text-white hover:bg-amber-700"
+              disabled={loadingCommande}
+              className="px-6 py-3 rounded bg-amber-800 text-white hover:bg-amber-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
             >
-              Commander
+              {loadingCommande ? "Commande en cours..." : "Commander"}
             </button>
           </div>
         </div>
