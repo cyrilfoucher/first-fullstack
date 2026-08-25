@@ -7,6 +7,7 @@ function Boutique() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [produits, setProduits] = useState([]);
+
   const { ajouterAuPanier } = useContext(CartContext);
   useEffect(() => {
     async function chargerProduits() {
@@ -43,16 +44,16 @@ function Boutique() {
             className="flex flex-col justify-between border border-amber-800 rounded-2xl m-4 p-4 h-full"
           >
             <h2 className="font-bold text-xl text-amber-800">{produit.titre}</h2>
-            <p className="italic h-12">{produit.description}</p>
+            <p className="italic min-h-12">{produit.description}</p>
             <img
               src={produit.image}
               alt={produit.titre}
-              className="h-96 w-80 object-cover rounded p-4 mx-auto  "
+              className="mx-auto h-96 w-full max-w-80 rounded object-cover p-4 transition duration-300 hover:scale-105"
             />
-            <p className="text-lg font-bold">{produit.prix.toFixed(2)} €</p>
+            <p className="text-xl font-bold text-amber-800">{produit.prix.toFixed(2)} €</p>
             <button
               onClick={() => ajouterAuPanier(produit)}
-              className="rounded-lg text-white p-4 mt-2 hover:scale-105 bg-amber-800"
+              className=" w-full rounded-lg text-white p-4 mt-2 hover:scale-105 bg-amber-800 transition duration-300"
             >
               Ajouter au panier
             </button>

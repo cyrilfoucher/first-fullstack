@@ -68,14 +68,14 @@ function Produits() {
   return (
     <>
       <PageHeader title="Produits" />
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
         {produits.map((p) => (
-          <div key={p._id} className="border rounded-2xl bg-amber-50 mt-4  ">
-            <div className="flex justify-center items-center p-4">
+          <div key={p._id} className="flex flex-col border rounded-2xl bg-amber-50 mt-4  ">
+            <div className="flex flex-col justify-center items-center  p-4">
               {" "}
               <img src={p.image} alt={p.titre} className=" w-32 h-auto rounded mt-2" />
             </div>
-            <div className="flex flex-col gap-6 py-3 px-4 ">
+            <div className="flex flex-1 flex-col gap-6 py-3 px-4 ">
               {" "}
               <p className="text-xl font-bold">{p.titre}</p>
               <p>

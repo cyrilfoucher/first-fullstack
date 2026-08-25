@@ -50,17 +50,23 @@ export const postProduit = async (req, res) => {
 
 export const putProduit = async (req, res) => {
   const id = req.params.id;
-  const { titre, description, prix, image, stock } = req.body;
-  const produit = await Produits.findByIdAndUpdate(
-    id,
-    { titre, description, prix, image, stock },
-    { returnDocument: "after" },
-  );
-  produit.titre = titre;
-  produit.description = description;
-  produit.prix = prix;
-  produit.image = image;
-  produit.stock = stock;
+  const { titre, description, prix, stock } = req.body;
+  const donnees = {
+    titre,
+    description,
+    prix,
+    stock,
+  };
+  if (req.file) {
+    const imageUpload = await uploadImage(req.file.buffer);
+    donnees.image = imageUpload.secure_url;
+  }
+  const produit = await Produits.findByIdAndUpdate(id, donnees, {
+    returnDocument: "after",
+  });
+  if (!produit) {
+    throw new AppError("Produit introuvable", 404);
+  }
   return res.status(200).json({ message: "Produit Modifié", produit });
 };
 

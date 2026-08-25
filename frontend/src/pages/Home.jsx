@@ -5,8 +5,15 @@ function Home() {
   return (
     <>
       <PageHeader title="Autour du monde" />
-      <img src={HeroImage} alt="image principale du site" />
-      <p>Bienvenue sur mon premier site !</p>
+
+      <p className="mx-auto mt-8 max-w-2xl px-4 text-center text-base sm:text-lg text-amber-800 pb-8">
+        Explorez le monde, trouvez l'inspiration et préparez votre prochain voyage.
+      </p>
+      <img
+        src={HeroImage}
+        alt="image principale du site"
+        className="mx-auto w-full max-w-5xl rounded-xl shadow-lg h-auto mb-6 sm:mb-10"
+      />
     </>
   );
 }

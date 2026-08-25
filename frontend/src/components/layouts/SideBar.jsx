@@ -8,7 +8,7 @@ function SideBar() {
     navigate("/login");
   }
   return (
-    <aside className="w-72 min-h-screen bg-amber-800 p-6 text-white rounded-lg ">
+    <aside className="w-full rounded-lg bg-amber-800 p-6 text-white md:min-h-screen md:w-72">
       <h2 className="flex justify-center font-bold bg-amber-100  text-black rounded p-1 my-2 m-6">
         Administration
       </h2>

@@ -10,8 +10,11 @@ function ModifierProduit() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [produit, setProduit] = useState({});
+  const [preview, setPreview] = useState("");
   const navigate = useNavigate();
   const { register, handleSubmit, reset } = useForm();
+  const imageRegister = register("image");
+
   useEffect(() => {
     async function chargerProduit() {
       try {
@@ -19,8 +22,9 @@ function ModifierProduit() {
         setError("");
         const response = await api.get(`/produits/${id}`);
         setProduit(response.data);
+        setPreview(response.data.image);
       } catch (error) {
-        console.log(error);
+        console.log(error.response?.data);
         setError("Une erreur est survenue");
         toast.error("Une erreur est survenue");
       } finally {
@@ -45,7 +49,17 @@ function ModifierProduit() {
     try {
       setLoading(true);
       setError("");
-      await api.put(`/produits/${id}`, data);
+      const formData = new FormData();
+
+      formData.append("titre", data.titre);
+      formData.append("description", data.description);
+      formData.append("prix", data.prix);
+      formData.append("stock", data.stock);
+      if (data.image && data.image[0]) {
+        formData.append("image", data.image[0]);
+      }
+      await api.put(`/produits/${id}`, formData);
+
       toast.success("Produit modifié avec succès");
       navigate("/admin/produits");
     } catch (error) {
@@ -55,6 +69,16 @@ function ModifierProduit() {
     } finally {
       setLoading(false);
     }
+  }
+  function previewImage(event) {
+    const file = event.target.files[0];
+
+    if (!file) {
+      setPreview("");
+      return;
+    }
+
+    setPreview(URL.createObjectURL(file));
   }
   if (error) {
     return (
@@ -120,10 +144,19 @@ function ModifierProduit() {
               Image :{" "}
             </label>
             <input
+              type="file"
+              accept=".jpg,.jpeg,.png,.webp"
               id="image"
-              {...register("image")}
-              className="w-full border rounded-lg px-3 py-2 mb-6"
+              {...imageRegister}
+              onChange={(event) => {
+                imageRegister.onChange(event);
+                previewImage(event);
+              }}
+              className="w-full border  rounded-lg px-3 py-2 file:mr-4  file:rounded-lg  file:border-0  file:bg-amber-800  file:px-4   file:py-2  file:text-amber-100 file:hover:bg-amber-700 cursor-pointer"
             />
+            {preview && (
+              <img src={preview} alt="aperçu du produit" className="mt-4 w-32 rounded-xl" />
+            )}
           </div>
           <div className="flex justify-center mt-8">
             <button

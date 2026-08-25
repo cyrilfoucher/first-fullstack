@@ -26,10 +26,10 @@ function ListeDeCommandes() {
     <>
       <PageHeader title="Gestion des commandes" />
 
-      <div className="max-w-4xl mx-auto p-8">
+      <div className="mx-auto max-w-4xl p-4 sm:p-8">
         <div className="border border-amber-800 rounded-xl p-6 mb-8">
-          <div className="flex items-end gap-6">
-            <div className="w-96">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:gap-6">
+            <div className="w-full sm:w-96">
               <label className="block font-semibold mb-2">Rechercher un client</label>
               <input
                 type="text"
@@ -40,7 +40,7 @@ function ListeDeCommandes() {
               />
             </div>
 
-            <div className="w-64">
+            <div className="w-full sm:w-64">
               <label className="block font-semibold mb-2">Filtrer par statut</label>
               <select
                 value={filtreStatut}
@@ -55,7 +55,7 @@ function ListeDeCommandes() {
               </select>
             </div>
           </div>
-          <div className="w-64 p-1">
+          <div className="mt-4 w-full sm:mt-0 sm:w-64">
             <label className="block font-semibold mb-2">Trier par date</label>
             <select
               value={ordreDate}
@@ -85,7 +85,7 @@ function ListeDeCommandes() {
           })
           .map((liste) => (
             <div key={liste._id} className="border rounded-xl border-amber-800 shadow-mb mb-6 p-6">
-              <div className="flex justify-between font-bold">
+              <div className="flex flex-col gap-4 font-bold sm:flex-row sm:justify-between">
                 <div>
                   <p>Commande n° {liste._id.slice(0, 8)}</p>
                   <p>
@@ -97,12 +97,12 @@ function ListeDeCommandes() {
                     })}
                   </p>
                 </div>
-                <div>
+                <div className="flex flex-col gap-3">
                   <p>Total: {liste.total.toFixed(2)} €</p>
                   <select
                     value={statutSelectionne[liste._id] || liste.statut}
                     onChange={(event) => changerStatutCommande(event, liste._id)}
-                    className="border border-amber-800 rounded-lg px-3 py-1"
+                    className="w-full border border-amber-800 rounded-lg px-3 py-2 sm:w-auto"
                   >
                     <option value="En attente de traitement">En attente de traitement</option>
                     <option value="En préparation">En préparation</option>
@@ -111,7 +111,7 @@ function ListeDeCommandes() {
                   </select>
                   <button
                     onClick={() => MettreAJourStatut(liste._id)}
-                    className=" ml-3 bg-amber-800 text-white px-4 py-2 rounded-lg  hover:bg-amber-900 transition"
+                    className="w-full rounded-lg bg-amber-800 px-4 py-2 text-white transition hover:bg-amber-900 sm:ml-0 sm:w-auto"
                   >
                     Mettre à jour
                   </button>
@@ -132,7 +132,7 @@ function ListeDeCommandes() {
               <div className="mt-6">
                 {liste.produits.map((detail) => (
                   <div key={detail._id} className="border border-amber-800 rounded-lg mb-3 p-4">
-                    <div className="flex items-start gap-4 ">
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-start">
                       <img
                         src={detail.produit.image}
                         alt={detail.produit.description}
@@ -142,7 +142,7 @@ function ListeDeCommandes() {
                         <p className="font-semibold text-lg ">{detail.produit.titre}</p>
                       </div>
                     </div>
-                    <div className="flex justify-between mt-3">
+                    <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:justify-between">
                       <p>
                         <span className="font-semibold">Quantité:</span>
                         {detail.quantite}

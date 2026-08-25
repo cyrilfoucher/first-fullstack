@@ -32,6 +32,7 @@ router.put(
   "/:id",
   authMiddleware,
   authorize("admin"),
+  upload.single("image"),
   validate(updateProduitSchema),
   asyncHandler(putProduit),
 );
