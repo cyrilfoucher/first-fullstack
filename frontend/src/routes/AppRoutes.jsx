@@ -14,6 +14,7 @@ import ProtectedRoute from "./ProtectedRoute.jsx";
 import Panier from "../pages/Panier.jsx";
 import MesCommandes from "../pages/MesCommandes.jsx";
 import ListeDeCommandes from "../pages/admin/ListeDeCommandes.jsx";
+import PaiementSucces from "../pages/PaiementSucces.jsx";
 
 function AppRoutes() {
   return (
@@ -24,6 +25,7 @@ function AppRoutes() {
         <Route path="/register" element={<Register />} />
         <Route path="/boutique" element={<Boutique />} />
         <Route path="/panier" element={<Panier />} />
+        <Route path="/paiement/succes" element={<PaiementSucces />} />
         <Route
           path="/compte"
           element={

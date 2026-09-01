@@ -29,6 +29,10 @@ const commandeSchema = new Schema(
       type: Number,
       required: true,
     },
+    stripeSessionId: {
+      type: String,
+      unique: true,
+    },
     statut: {
       type: String,
       required: true,

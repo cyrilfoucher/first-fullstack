@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import CartContext from "../contexts/CartContext";
 import PageHeader from "../components/common/header/PageHeader";
-import { commande } from "../services/commande.service.js";
+import { payerAvecStripe } from "../services/stripe.service.js";
 import { toast } from "react-toastify";
 
 function Panier() {
@@ -21,12 +21,11 @@ function Panier() {
       </>
     );
   }
-  async function commander() {
+  async function payer() {
     try {
       setLoadingCommande(true);
-      await commande({ panier: panier });
-      clearPanier();
-      toast.success("Commande enregistrée");
+      const session = await payerAvecStripe({ panier });
+      window.location.href = session.url;
     } catch (error) {
       if (error.response?.status === 401) {
         toast.error("Veuillez vous connecter pour passer une commande.");
@@ -111,7 +110,7 @@ function Panier() {
               Vider le panier
             </button>
             <button
-              onClick={commander}
+              onClick={payer}
               disabled={loadingCommande}
               className="px-6 py-3 rounded bg-amber-800 text-white hover:bg-amber-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
             >
