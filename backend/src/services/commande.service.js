@@ -1,6 +1,8 @@
 import AppError from "../utils/AppError.js";
 import Produit from "../models/Produit.js";
 import Commande from "../models/Commande.js";
+import Utilisateur from "../models/Utilisateur.js";
+import { envoyerMailConfirmationCommande } from "./mail.service.js";
 
 export async function creerCommande(utilisateurId, panier, stripeSessionId) {
   const produitsCommande = [];
@@ -26,6 +28,8 @@ export async function creerCommande(utilisateurId, panier, stripeSessionId) {
       produit: produit._id,
       quantite: item.quantite,
       prix: produit.prix,
+      titre: produit.titre,
+      image: produit.image,
     });
     produit.stock = produit.stock - item.quantite;
     await produit.save();
@@ -42,5 +46,11 @@ export async function creerCommande(utilisateurId, panier, stripeSessionId) {
     total,
     stripeSessionId,
   });
+  const utilisateur = await Utilisateur.findById(utilisateurId);
+  await envoyerMailConfirmationCommande(
+    utilisateur.email,
+    utilisateur.prenom,
+    commande,
+  );
   return commande;
 }

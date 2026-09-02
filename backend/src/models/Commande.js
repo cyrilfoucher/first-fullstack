@@ -14,6 +14,14 @@ const commandeSchema = new Schema(
           ref: "Produit",
           required: true,
         },
+        titre: {
+          type: String,
+          required: true,
+        },
+        image: {
+          type: String,
+          required: true,
+        },
         quantite: {
           type: Number,
           required: true,
