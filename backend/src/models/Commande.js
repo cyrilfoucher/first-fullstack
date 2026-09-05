@@ -40,11 +40,30 @@ const commandeSchema = new Schema(
     stripeSessionId: {
       type: String,
       unique: true,
+      sparse: true,
+    },
+    paymentIntentId: {
+      type: String,
+      default: null,
     },
     statut: {
       type: String,
       required: true,
-      default: "En attente de traitement",
+      default: "Paiement en attente",
+      enum: [
+        "Paiement en attente",
+        "En attente de traitement",
+        "En préparation",
+        "Expédiée",
+        "Livrée",
+        "Annulée",
+      ],
+    },
+    paymentStatus: {
+      type: String,
+      required: true,
+      default: "pending",
+      enum: ["pending", "paid", "refunded", "failed"],
     },
   },
   { timestamps: true },

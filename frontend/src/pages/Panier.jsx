@@ -24,7 +24,12 @@ function Panier() {
   async function payer() {
     try {
       setLoadingCommande(true);
-      const session = await payerAvecStripe({ panier });
+      const session = await payerAvecStripe({
+        panier: panier.map((item) => ({
+          produit: item.produit._id,
+          quantite: item.quantite,
+        })),
+      });
       window.location.href = session.url;
     } catch (error) {
       if (error.response?.status === 401) {

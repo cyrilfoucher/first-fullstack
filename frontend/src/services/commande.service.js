@@ -19,3 +19,8 @@ export async function updateStatutCommande(id, statut) {
   const response = await api.patch(`/commandes/${id}`, { statut });
   return response.data;
 }
+
+export async function annulerCommande(id) {
+  const response = await api.patch(`/commandes/${id}/annulation`);
+  return response.data;
+}

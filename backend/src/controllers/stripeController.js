@@ -1,23 +1,33 @@
 import stripe from "../config/stripes.js";
-import { creerCommande } from "../services/commande.service.js";
+import {
+  creerCommande,
+  creerCommandeEnAttente,
+} from "../services/commande.service.js";
+import Produit from "../models/Produit.js";
 import AppError from "../utils/AppError.js";
 
 export async function creerSessionPaiement(req, res) {
   const { panier } = req.body;
-  const produitsStripe = panier.map((item) => {
-    return {
+  const produitsStripe = [];
+
+  for (const item of panier) {
+    const produit = await Produit.findById(item.produit);
+    if (!produit) {
+      throw new AppError("Produit introuvable", 404);
+    }
+    produitsStripe.push({
       price_data: {
         currency: "eur",
         product_data: {
-          name: item.produit.titre,
-          images: [item.produit.image],
+          name: produit.titre,
+          images: [produit.image],
         },
-        unit_amount: Math.round(item.produit.prix * 100),
+        unit_amount: Math.round(produit.prix * 100),
       },
       quantity: item.quantite,
-    };
-  });
-
+    });
+  }
+  const commande = await creerCommandeEnAttente(req.user._id, panier);
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ["card"],
     mode: "payment",
@@ -25,8 +35,7 @@ export async function creerSessionPaiement(req, res) {
     success_url: `${process.env.FRONTEND_URL}/paiement/succes`,
     cancel_url: `${process.env.FRONTEND_URL}/panier`,
     metadata: {
-      utilisateurId: req.user._id.toString(),
-      panier: JSON.stringify(panier),
+      commandeId: commande._id.toString(),
     },
   });
   return res.status(200).json({
@@ -45,11 +54,11 @@ export async function webhookStripe(req, res) {
 
   if (event.type === "checkout.session.completed") {
     const session = event.data.object;
-    const utilisateurId = session.metadata.utilisateurId;
-    const panier = JSON.parse(session.metadata.panier);
+    const paymentIntentId = session.payment_intent;
+    const commandeId = session.metadata.commandeId;
     const stripeSessionId = session.id;
 
-    await creerCommande(utilisateurId, panier, stripeSessionId);
+    await creerCommande(commandeId, stripeSessionId, paymentIntentId);
   }
   return res.sendStatus(200);
 }

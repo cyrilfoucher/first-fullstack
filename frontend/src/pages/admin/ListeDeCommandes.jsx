@@ -11,6 +11,13 @@ function ListeDeCommandes() {
   useEffect(() => {
     async function recupCommandes() {
       const commandes = await getAdminCommandes();
+      console.log(commandes);
+      console.log(
+        commandes.map((c) => ({
+          id: c._id,
+          statut: c.statut,
+        }))
+      );
       setCommandes(commandes);
     }
     recupCommandes();
@@ -52,6 +59,7 @@ function ListeDeCommandes() {
                 <option value="En préparation">En préparation</option>
                 <option value="Expédiée">Expédiée</option>
                 <option value="Livrée">Livrée</option>
+                <option value="Annulée">Annulée</option>
               </select>
             </div>
           </div>
@@ -108,6 +116,7 @@ function ListeDeCommandes() {
                     <option value="En préparation">En préparation</option>
                     <option value="Expédiée">Expédiée</option>
                     <option value="Livrée">Livrée</option>
+                    <option value="Annulée">Annulée</option>
                   </select>
                   <button
                     onClick={() => MettreAJourStatut(liste._id)}
