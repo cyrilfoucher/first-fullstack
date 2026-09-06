@@ -7,6 +7,9 @@ function Boutique() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [produits, setProduits] = useState([]);
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(8);
+  const [totalPages, setTotalPages] = useState(1);
 
   const { ajouterAuPanier } = useContext(CartContext);
   useEffect(() => {
@@ -14,8 +17,9 @@ function Boutique() {
       setError("");
       try {
         setLoading(true);
-        const response = await api.get("/produits");
-        setProduits(response.data);
+        const response = await api.get("/produits", { params: { page: page, limit: limit } });
+        setProduits(response.data.produits);
+        setTotalPages(response.data.totalPages);
       } catch (error) {
         console.log(error);
         setError("Une erreur est survenue lors du chargement");
@@ -24,7 +28,7 @@ function Boutique() {
       }
     }
     chargerProduits();
-  }, []);
+  }, [page, limit]);
   if (loading) {
     return <p>Chargement...</p>;
   }
@@ -37,6 +41,24 @@ function Boutique() {
   return (
     <>
       <PageHeader title="Boutique" />
+      <div className="flex items-center justify-center p-6">
+        <label className="mr-2 text-2xl text-amber-800">Produits par page :</label>
+
+        <select
+          value={limit}
+          onChange={(e) => {
+            setLimit(Number(e.target.value));
+            setPage(1);
+          }}
+          className="border rounded px-3 py-2"
+        >
+          <option value={2}>2</option>
+          <option value={4}>4</option>
+          <option value={8}>8</option>
+          <option value={16}>16</option>
+          <option value={32}>32</option>
+        </select>
+      </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-center py-12">
         {produits.map((produit) => (
           <div
@@ -59,6 +81,39 @@ function Boutique() {
             </button>
           </div>
         ))}
+      </div>
+      <div className="flex items-centers justify-center gap-4 mt-8 p-6">
+        <button
+          onClick={() => setPage(1)}
+          disabled={page === 1}
+          className="px-4 py-2 bg-amber-800 text-white rounded disabled:bg-gray-400 disabled:cursor-not-allowed"
+        >
+          Début
+        </button>
+        <button
+          onClick={() => setPage(page - 1)}
+          disabled={page === 1}
+          className="px-4 py-2 bg-amber-800 text-white rounded disabled:bg-gray-400 disabled:cursor-not-allowed"
+        >
+          Précédent
+        </button>
+        <p>
+          {page} sur {totalPages}
+        </p>
+        <button
+          onClick={() => setPage(page + 1)}
+          disabled={page === totalPages}
+          className="px-4 py-2 bg-amber-800 text-white rounded disabled:bg-gray-400 disabled:cursor-not-allowed"
+        >
+          suivant
+        </button>
+        <button
+          onClick={() => setPage(totalPages)}
+          disabled={page === totalPages}
+          className="px-4 py-2 bg-amber-800 text-white rounded disabled:bg-gray-400 disabled:cursor-not-allowed"
+        >
+          Fin
+        </button>
       </div>
     </>
   );

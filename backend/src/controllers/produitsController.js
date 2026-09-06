@@ -2,6 +2,7 @@ import Produits from "../models/Produit.js";
 import AppError from "../utils/AppError.js";
 import cloudinary from "../config/cloudinary.js";
 import { Readable } from "stream";
+import { $ZodAny } from "zod/v4/core";
 
 const uploadImage = (buffer) => {
   return new Promise((resolve, reject) => {
@@ -19,8 +20,19 @@ const uploadImage = (buffer) => {
 };
 
 export const getProduits = async (req, res) => {
-  const liste = await Produits.find();
-  return res.status(200).json(liste);
+  const { page = 1, limit = 8 } = req.query;
+  const pageNumber = Number(page);
+  const limitNumber = Number(limit);
+  const skip = (pageNumber - 1) * limitNumber;
+  const liste = await Produits.find().skip(skip).limit(limitNumber);
+  const totalProduits = await Produits.countDocuments();
+  const totalPages = Math.ceil(totalProduits / limitNumber);
+  return res.status(200).json({
+    produits: liste,
+    page: pageNumber,
+    totalPages,
+    totalProduits,
+  });
 };
 
 export const getProduit = async (req, res) => {

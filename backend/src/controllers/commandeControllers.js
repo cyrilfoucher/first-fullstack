@@ -3,7 +3,11 @@ import Produit from "../models/Produit.js";
 import Commande from "../models/Commande.js";
 import Utilisateur from "../models/Utilisateur.js";
 import { remboursementStripe } from "../services/stripe.service.js";
-import { envoyerMailAnnulationCommande } from "../services/mail.service.js";
+import {
+  envoyerMailAnnulationCommande,
+  envoyerMailExpeditionCommande,
+  envoyerMailLivraisonCommande,
+} from "../services/mail.service.js";
 
 export const getCommandes = async (req, res) => {
   const commandes = await Commande.find({
@@ -29,6 +33,21 @@ export const updateStatutCommande = async (req, res) => {
   }
   commande.statut = statut;
   await commande.save();
+  const utilisateur = await Utilisateur.findById(commande.utilisateur);
+  if (statut === "Expédiée") {
+    await envoyerMailExpeditionCommande(
+      utilisateur.email,
+      utilisateur.prenom,
+      commande,
+    );
+  }
+  if (statut === "Livrée") {
+    await envoyerMailLivraisonCommande(
+      utilisateur.email,
+      utilisateur.prenom,
+      commande,
+    );
+  }
   return res.status(200).json(commande);
 };
 
