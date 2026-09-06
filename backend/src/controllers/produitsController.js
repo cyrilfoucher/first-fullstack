@@ -20,12 +20,19 @@ const uploadImage = (buffer) => {
 };
 
 export const getProduits = async (req, res) => {
-  const { page = 1, limit = 8 } = req.query;
+  const { page = 1, limit = 8, recherche = "" } = req.query;
   const pageNumber = Number(page);
   const limitNumber = Number(limit);
   const skip = (pageNumber - 1) * limitNumber;
-  const liste = await Produits.find().skip(skip).limit(limitNumber);
-  const totalProduits = await Produits.countDocuments();
+  const filtre = {};
+  if (recherche) {
+    filtre.titre = {
+      $regex: recherche,
+      $options: "i",
+    };
+  }
+  const liste = await Produits.find(filtre).skip(skip).limit(limitNumber);
+  const totalProduits = await Produits.countDocuments(filtre);
   const totalPages = Math.ceil(totalProduits / limitNumber);
   return res.status(200).json({
     produits: liste,

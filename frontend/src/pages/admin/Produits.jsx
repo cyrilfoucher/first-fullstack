@@ -30,7 +30,7 @@ function Produits() {
         setLoading(true);
         setError("");
         const response = await api.get("/produits");
-        setProduits(response.data);
+        setProduits(response.data.produits);
       } catch (error) {
         console.log(error);
         setError("Une erreur est survenue");
