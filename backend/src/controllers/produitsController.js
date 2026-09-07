@@ -2,7 +2,6 @@ import Produits from "../models/Produit.js";
 import AppError from "../utils/AppError.js";
 import cloudinary from "../config/cloudinary.js";
 import { Readable } from "stream";
-import { $ZodAny } from "zod/v4/core";
 
 const uploadImage = (buffer) => {
   return new Promise((resolve, reject) => {
@@ -20,7 +19,7 @@ const uploadImage = (buffer) => {
 };
 
 export const getProduits = async (req, res) => {
-  const { page = 1, limit = 8, recherche = "" } = req.query;
+  const { page = 1, limit = 8, recherche = "", tri = "" } = req.query;
   const pageNumber = Number(page);
   const limitNumber = Number(limit);
   const skip = (pageNumber - 1) * limitNumber;
@@ -31,7 +30,26 @@ export const getProduits = async (req, res) => {
       $options: "i",
     };
   }
-  const liste = await Produits.find(filtre).skip(skip).limit(limitNumber);
+  const triMongo = {};
+  if (tri === "prix-asc") {
+    triMongo.prix = 1;
+  }
+  if (tri === "prix-desc") {
+    triMongo.prix = -1;
+  }
+  if (tri === "titre-asc") {
+    triMongo.titre = 1;
+  }
+  if (tri === "titre-desc") {
+    triMongo.titre = -1;
+  }
+  if (tri === "recent") {
+    triMongo.createdAt = -1;
+  }
+  const liste = await Produits.find(filtre)
+    .sort(triMongo)
+    .skip(skip)
+    .limit(limitNumber);
   const totalProduits = await Produits.countDocuments(filtre);
   const totalPages = Math.ceil(totalProduits / limitNumber);
   return res.status(200).json({

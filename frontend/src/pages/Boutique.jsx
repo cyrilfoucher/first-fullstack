@@ -9,6 +9,7 @@ function Boutique() {
   const [produits, setProduits] = useState([]);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(8);
+  const [tri, setTri] = useState("");
   const [totalPages, setTotalPages] = useState(1);
   const [recherche, setRecherche] = useState("");
   const [rechercheInput, setRechercheInput] = useState("");
@@ -19,7 +20,7 @@ function Boutique() {
       setError("");
       try {
         setLoading(true);
-        const response = await api.get("/produits", { params: { page, limit, recherche } });
+        const response = await api.get("/produits", { params: { page, limit, recherche, tri } });
         setProduits(response.data.produits);
         setTotalPages(response.data.totalPages);
       } catch (error) {
@@ -30,7 +31,7 @@ function Boutique() {
       }
     }
     chargerProduits();
-  }, [page, limit, recherche]);
+  }, [page, limit, recherche, tri]);
   if (loading) {
     return <p>Chargement...</p>;
   }
@@ -59,6 +60,21 @@ function Boutique() {
             <option value={8}>8</option>
             <option value={16}>16</option>
             <option value={32}>32</option>
+          </select>
+          <select
+            value={tri}
+            onChange={(e) => {
+              setTri(e.target.value);
+              setPage(1);
+            }}
+            className="border rounded px-3 py-2"
+          >
+            <option value="">Trier par</option>
+            <option value="recent">Plus récent</option>
+            <option value="prix-asc">Prix croissant</option>
+            <option value="prix-desc">Prix décroissant</option>
+            <option value="titre-asc">A-Z</option>
+            <option value="titre-desc">Z-A</option>
           </select>
         </div>
 
