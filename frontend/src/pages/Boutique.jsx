@@ -117,7 +117,8 @@ function Boutique() {
             <p className="text-xl font-bold text-amber-800">{produit.prix.toFixed(2)} €</p>
             <button
               onClick={() => ajouterAuPanier(produit)}
-              className=" w-full rounded-lg text-white p-4 mt-2 hover:scale-105 bg-amber-800 transition duration-300"
+              disabled={produit.stock === 0}
+              className="w-full rounded-lg bg-amber-800 p-4 mt-2 text-white transition duration-300 hover:scale-105 disabled:bg-gray-400 disabled:cursor-not-allowed"
             >
               Ajouter au panier
             </button>

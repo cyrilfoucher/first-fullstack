@@ -7,6 +7,10 @@ export function CartProvider({ children }) {
   const [panier, setPanier] = useState([]);
   function ajouterAuPanier(produit) {
     const itemExistant = panier.find((item) => item.produit._id === produit._id);
+    if (itemExistant && itemExistant.quantite >= produit.stock) {
+      toast.warning("Stock maximum atteint");
+      return;
+    }
 
     if (itemExistant) {
       setPanier(
