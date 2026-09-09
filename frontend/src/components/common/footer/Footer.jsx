@@ -1,4 +1,5 @@
 import logosite from "../../../assets/images/logosite.png";
+import { Link } from "react-router-dom";
 
 function Footer() {
   return (
@@ -8,11 +9,14 @@ function Footer() {
         <img src={logosite} alt="logo du site" className="w-20 h-auto rounded-md block mx-auto " />
         <div className="mt-8 grid grid-cols-1 gap-6 px-4 py-6 sm:px-8 md:grid-cols-3">
           <div className="justify-self-center flex flex-col gap-2 items-center">
-            <h2 className="font-semibold">Description</h2>
+            <h2 className="text-lg font-semibold">Description</h2>
             <p>Projet Full Stack de voyage.</p>
+            <Link to="/a-propos" className="text-sm sm:text-base hover:underline transition-colors">
+              À propos
+            </Link>
           </div>
           <div className="justify-self-center flex flex-col gap-2 items-center">
-            <h2 className="font-semibold">Contact</h2>
+            <h2 className="text-lg font-semibold">Contact</h2>
             <a
               href="mailto:macylcyril@hotmail.fr"
               className="text-sm sm:text-base hover:underline transition-colors"
@@ -27,7 +31,7 @@ function Footer() {
             </a>
           </div>
           <div className="justify-self-center flex flex-col gap-2 items-center">
-            <h2 className="font-semibold">Réseaux</h2>
+            <h2 className="text-lg font-semibold">Réseaux</h2>
             <a
               href="https://www.linkedin.com/in/cyril-foucher-a06a19236"
               target="_blank"
@@ -49,7 +53,8 @@ function Footer() {
       </div>
       <div className="border-t mt-6 pt-6 text-center text-sm text-amber-700 opacity-80">
         <p className="mx-auto max-w-4xl px-4">
-          © 2026 Autour du Monde • Développé avec React, Express, MongoDB et Tailwind CSS.
+          © 2026 Autour du Monde • Projet développé dans le cadre de mon apprentissage du
+          développement Full-Stack.
         </p>
       </div>
     </footer>

@@ -16,6 +16,7 @@ import MesCommandes from "../pages/MesCommandes.jsx";
 import ListeDeCommandes from "../pages/admin/ListeDeCommandes.jsx";
 import PaiementSucces from "../pages/PaiementSucces.jsx";
 import Destination from "../pages/destinations/Destination.jsx";
+import APropos from "../pages/APropos.jsx";
 
 function AppRoutes() {
   return (
@@ -27,6 +28,7 @@ function AppRoutes() {
         <Route path="/boutique" element={<Boutique />} />
         <Route path="/panier" element={<Panier />} />
         <Route path="/paiement/succes" element={<PaiementSucces />} />
+        <Route path="/a-propos" element={<APropos />} />
         <Route
           path="/compte"
           element={
