@@ -49,8 +49,7 @@ function Footer() {
       </div>
       <div className="border-t mt-6 pt-6 text-center text-sm text-amber-700 opacity-80">
         <p className="mx-auto max-w-4xl px-4">
-          © 2026 Mon premier projet • Ce projet full-stack repose sur React, Vite et Tailwind CSS
-          côté interface, ainsi que sur Node.js, Express, MongoDB, JWT et Cloudinary côté serveur.
+          © 2026 Autour du Monde • Développé avec React, Express, MongoDB et Tailwind CSS.
         </p>
       </div>
     </footer>

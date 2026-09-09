@@ -15,6 +15,7 @@ import Panier from "../pages/Panier.jsx";
 import MesCommandes from "../pages/MesCommandes.jsx";
 import ListeDeCommandes from "../pages/admin/ListeDeCommandes.jsx";
 import PaiementSucces from "../pages/PaiementSucces.jsx";
+import Destination from "../pages/destinations/Destination.jsx";
 
 function AppRoutes() {
   return (
@@ -42,6 +43,7 @@ function AppRoutes() {
             </ProtectedRoute>
           }
         />
+        <Route path="/destinations/:nom" element={<Destination />} />
       </Route>
       <Route path="*" element={<NotFound />} />
 
