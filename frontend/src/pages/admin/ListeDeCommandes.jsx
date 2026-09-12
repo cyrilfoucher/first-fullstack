@@ -11,13 +11,6 @@ function ListeDeCommandes() {
   useEffect(() => {
     async function recupCommandes() {
       const commandes = await getAdminCommandes();
-      console.log(commandes);
-      console.log(
-        commandes.map((c) => ({
-          id: c._id,
-          statut: c.statut,
-        }))
-      );
       setCommandes(commandes);
     }
     recupCommandes();
@@ -55,6 +48,7 @@ function ListeDeCommandes() {
                 className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:border-amber-800"
               >
                 <option value="Tous">Tous</option>
+                <option value="Paiement en attente">Paiement en attente</option>
                 <option value="En attente de traitement">En attente de traitement</option>
                 <option value="En préparation">En préparation</option>
                 <option value="Expédiée">Expédiée</option>
@@ -112,6 +106,7 @@ function ListeDeCommandes() {
                     onChange={(event) => changerStatutCommande(event, liste._id)}
                     className="w-full border border-amber-800 rounded-lg px-3 py-2 sm:w-auto"
                   >
+                    <option value="Paiement en attente">Paiement en attente</option>
                     <option value="En attente de traitement">En attente de traitement</option>
                     <option value="En préparation">En préparation</option>
                     <option value="Expédiée">Expédiée</option>

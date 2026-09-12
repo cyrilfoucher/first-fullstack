@@ -19,9 +19,15 @@ export const getCommandes = async (req, res) => {
 export const getToutesCommandes = async (req, res) => {
   const commandes = await Commande.find()
     .populate("produits.produit")
-    .populate("utilisateur", "prenom nom email");
+    .populate({
+      path: "utilisateur",
+      select: "prenom nom email",
+    });
+  const commandesValides = commandes.filter(
+    (commande) => commande.utilisateur !== null,
+  );
 
-  return res.status(200).json(commandes);
+  return res.status(200).json(commandesValides);
 };
 
 export const updateStatutCommande = async (req, res) => {
