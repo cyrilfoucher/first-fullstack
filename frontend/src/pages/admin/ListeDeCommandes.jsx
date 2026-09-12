@@ -142,13 +142,10 @@ function ListeDeCommandes() {
                 {liste.produits.map((detail) => (
                   <div key={detail._id} className="border border-amber-800 rounded-lg mb-3 p-4">
                     <div className="flex flex-col gap-3 sm:flex-row sm:items-start">
-                      <img
-                        src={detail.produit.image}
-                        alt={detail.produit.description}
-                        className="w-16 rounded"
-                      />
+                      <img src={detail.image} alt={detail.titre} className="w-16 rounded" />
+
                       <div className="flex-1">
-                        <p className="font-semibold text-lg ">{detail.produit.titre}</p>
+                        <p className="font-semibold text-lg">{detail.titre}</p>
                       </div>
                     </div>
                     <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:justify-between">
