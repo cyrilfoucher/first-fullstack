@@ -24,7 +24,66 @@ export const register = async (req, res) => {
   await sendEmail({
     to: email,
     subject: "Création de votre compte utilisateur",
-    text: `${prenom} votre compte a été crée avec succés`,
+    text: `Bonjour ${prenom},
+
+Votre compte Autour du Monde a été créé avec succès.
+
+Vous pouvez désormais vous connecter à votre espace personnel pour découvrir nos guides de voyage et suivre vos futures commandes.
+
+Merci de votre confiance.
+
+L'équipe Autour du Monde`,
+
+    html: `<!DOCTYPE html>
+<html lang="fr">
+<body style="margin:0;padding:0;background:#f4f4f4;font-family:Arial,sans-serif;">
+<div style="max-width:650px;margin:40px auto;background:#ffffff;border-radius:10px;overflow:hidden;">
+
+<div style="background:#92400e;color:#ffffff;padding:25px;text-align:center;">
+<h2 style="margin:0;">🌍 Autour du Monde</h2>
+</div>
+
+<div style="padding:40px;">
+
+<h1 style="margin-top:0;color:#92400e;text-align:center;">Bienvenue sur Autour du Monde</h1>
+
+<p style="line-height:1.7;">
+Bonjour <strong>${prenom}</strong>,<br><br>
+
+Votre compte a été créé avec succès.<br><br>
+
+Vous pouvez dès maintenant vous connecter à votre espace personnel pour découvrir notre sélection de guides de voyage, gérer vos commandes et préparer vos prochaines destinations.
+</p>
+
+<div style="margin-top:35px;border:1px solid #e5e7eb;border-radius:8px;padding:20px;background:#fafafa;">
+<h3 style="margin-top:0;color:#92400e;">Votre compte est prêt</h3>
+
+<p>✔️ Accédez à votre espace personnel</p>
+<p>✔️ Consultez notre catalogue de guides</p>
+<p>✔️ Suivez facilement vos commandes</p>
+</div>
+
+<div style="text-align:center;margin-top:40px;">
+<a href="${process.env.FRONTEND_URL}/connexion"
+style="display:inline-block;background:#92400e;color:#ffffff;text-decoration:none;padding:16px 34px;border-radius:8px;font-size:17px;font-weight:bold;">
+Se connecter
+</a>
+</div>
+
+<hr style="margin:40px 0;border:none;border-top:1px solid #e5e7eb;">
+
+<p style="text-align:center;color:#6b7280;font-size:14px;">
+Merci de votre confiance et bienvenue dans la communauté <strong>Autour du Monde</strong>.<br><br>
+
+<strong>Autour du Monde</strong><br>
+Vos guides de voyage numériques
+</p>
+
+</div>
+
+</div>
+</body>
+</html>`,
   });
   return res.status(201).json({ message: "Compte créer avec succés", token });
 };
