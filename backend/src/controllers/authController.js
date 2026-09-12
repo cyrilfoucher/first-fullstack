@@ -63,13 +63,6 @@ Vous pouvez dès maintenant vous connecter à votre espace personnel pour décou
 <p>✔️ Suivez facilement vos commandes</p>
 </div>
 
-<div style="text-align:center;margin-top:40px;">
-<a href="${process.env.FRONTEND_URL}/connexion"
-style="display:inline-block;background:#92400e;color:#ffffff;text-decoration:none;padding:16px 34px;border-radius:8px;font-size:17px;font-weight:bold;">
-Se connecter
-</a>
-</div>
-
 <hr style="margin:40px 0;border:none;border-top:1px solid #e5e7eb;">
 
 <p style="text-align:center;color:#6b7280;font-size:14px;">
