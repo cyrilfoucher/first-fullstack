@@ -31,7 +31,6 @@ export async function creerCommande(
   commande.paymentStatus = "paid";
   commande.statut = "En attente de traitement";
   await commande.save();
-
   const utilisateur = await Utilisateur.findById(commande.utilisateur);
   await envoyerMailConfirmationCommande(
     utilisateur.email,

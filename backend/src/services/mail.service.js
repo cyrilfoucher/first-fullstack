@@ -1,19 +1,36 @@
-import transporter from "../config/mailer.js";
+import { BrevoClient } from "@getbrevo/brevo";
 
+const brevo = new BrevoClient({
+  apiKey: process.env.BREVO_API_KEY,
+});
+
+export async function sendEmail({ to, subject, text, html }) {
+  try {
+    const response = await brevo.transactionalEmails.sendTransacEmail({
+      sender: {
+        name: "Autour du Monde",
+        email: "macylcyril@hotmail.fr",
+      },
+      to: [{ email: to }],
+      subject,
+      textContent: text,
+      htmlContent: html,
+    });
+
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
 export async function envoyerMailConfirmationCommande(email, prenom, commande) {
-  await transporter.sendMail({
-    from: process.env.EMAIL_USER,
+  await sendEmail({
     to: email,
     subject: "Confirmation de commande",
     text: `Bonjour ${prenom}, Merci pour votre commande.
-
 Votre commande a bien été enregistrée.
-
 Numéro de commande : ${commande._id}
 Montant total : ${commande.total.toFixed(2)} €
-
 Nous vous informerons dès que votre commande sera expédiée.
-
 L'équipe Autour du Monde`,
     html: `<!DOCTYPE html>
 <html lang="fr">
@@ -84,8 +101,7 @@ Vos guides de voyage numériques
 }
 
 export async function envoyerMailAnnulationCommande(email, prenom, commande) {
-  await transporter.sendMail({
-    from: process.env.EMAIL_USER,
+  await sendEmail({
     to: email,
     subject: "Confirmation d'annulation de votre commande",
     text: `Bonjour ${prenom},
@@ -164,8 +180,7 @@ Vos guides de voyage numériques
   });
 }
 export async function envoyerMailExpeditionCommande(email, prenom, commande) {
-  await transporter.sendMail({
-    from: process.env.EMAIL_USER,
+  await sendEmail({
     to: email,
     subject: "Expédition de votre commande",
     text: `Bonjour ${prenom},
@@ -248,8 +263,7 @@ Vos guides de voyage numériques
 }
 
 export async function envoyerMailLivraisonCommande(email, prenom, commande) {
-  await transporter.sendMail({
-    from: process.env.EMAIL_USER,
+  await sendEmail({
     to: email,
     subject: "Livraison de votre commande",
     text: `Bonjour ${prenom},

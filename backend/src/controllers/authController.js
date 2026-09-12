@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import AppError from "../utils/AppError.js";
 import Utilisateur from "../models/Utilisateur.js";
 import bcrypt from "bcrypt";
-import transporter from "../config/mailer.js";
+import { sendEmail } from "../services/mail.service.js";
 import generateToken from "../utils/generateToken.js";
 import crypto from "crypto";
 
@@ -21,11 +21,10 @@ export const register = async (req, res) => {
   });
   const token = generateToken(utilisateur);
 
-  await transporter.sendMail({
-    from: process.env.EMAIL_USER,
+  await sendEmail({
     to: email,
     subject: "Création de votre compte utilisateur",
-    text: `${prenom} votre compte a été créer avec succés`,
+    text: `${prenom} votre compte a été crée avec succés`,
   });
   return res.status(201).json({ message: "Compte créer avec succés", token });
 };
@@ -100,7 +99,6 @@ export const forgotPassword = async (req, res) => {
     throw new AppError("Aucun compte ne correspond a cette adresse mail", 404);
   }
   const resetToken = crypto.randomBytes(32).toString("hex");
-  console.log(resetToken);
   const resetPasswordToken = crypto
     .createHash("sha256")
     .update(resetToken)
@@ -108,11 +106,10 @@ export const forgotPassword = async (req, res) => {
   utilisateur.resetPasswordToken = resetPasswordToken;
   utilisateur.resetPasswordExpire = Date.now() + 15 * 60 * 1000;
   await utilisateur.save();
-  const resetUrl = `http://localhost:5173/reset-password/${resetToken}`;
+  const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
   try {
-    await transporter.sendMail({
-      from: process.env.EMAIL_USER,
-      to: utilisateur.email,
+    await sendEmail({
+      to: email,
       subject: "Réinitialisation du mot de passe",
       text: `Voici votre lien de réinitialisation valable 15mn : ${resetUrl}`,
     });
@@ -124,7 +121,7 @@ export const forgotPassword = async (req, res) => {
   }
   return res
     .status(200)
-    .json({ message: "Un email de téinitialisation a été envoyé." });
+    .json({ message: "Un email de réinitialisation a été envoyé." });
 };
 
 export const resetPassword = async (req, res) => {

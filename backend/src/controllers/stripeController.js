@@ -50,7 +50,6 @@ export async function webhookStripe(req, res) {
     signature,
     process.env.STRIPE_WEBHOOK_SECRET,
   );
-  console.log("Event reçu :", event.type);
 
   if (event.type === "checkout.session.completed") {
     const session = event.data.object;
