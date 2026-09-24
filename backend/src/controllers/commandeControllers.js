@@ -40,6 +40,9 @@ export const updateStatutCommande = async (req, res) => {
   commande.statut = statut;
   await commande.save();
   const utilisateur = await Utilisateur.findById(commande.utilisateur);
+  if (!utilisateur) {
+    throw new AppError("Utilisateur de la commande introuvable", 404);
+  }
   if (statut === "Expédiée") {
     await envoyerMailExpeditionCommande(
       utilisateur.email,
@@ -53,6 +56,17 @@ export const updateStatutCommande = async (req, res) => {
       utilisateur.prenom,
       commande,
     );
+  }
+  if (statut === "Annulée") {
+    try {
+      await envoyerMailAnnulationCommande(
+        utilisateur.email,
+        utilisateur.prenom,
+        commande,
+      );
+    } catch (error) {
+      console.log("Erreur lors de l'envoi du mail d'annulation : ", error);
+    }
   }
   return res.status(200).json(commande);
 };
@@ -76,12 +90,19 @@ export const annulerCommande = async (req, res) => {
 
   for (const item of commande.produits) {
     const produit = await Produit.findById(item.produit);
+    if (!produit) {
+      throw new AppError("Produit de la commande introuvable", 404);
+    }
     produit.stock = item.quantite + produit.stock;
     await produit.save();
   }
   commande.statut = "Annulée";
   await commande.save();
+
   const utilisateur = await Utilisateur.findById(commande.utilisateur);
+  if (!utilisateur) {
+    throw new AppError("Utilisateur de la commande introuvable", 404);
+  }
   try {
     await envoyerMailAnnulationCommande(
       utilisateur.email,
@@ -89,7 +110,7 @@ export const annulerCommande = async (req, res) => {
       commande,
     );
   } catch (error) {
-    console.error(error);
+    console.error("Erreur lors de l'envoi du mail d'annulation :", error);
   }
   return res
     .status(200)

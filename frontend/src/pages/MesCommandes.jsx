@@ -20,6 +20,7 @@ function MesCommandes() {
       setLoading(false);
     }
   }
+
   useEffect(() => {
     chargerCommandes();
   }, []);
@@ -32,7 +33,6 @@ function MesCommandes() {
       return;
     }
     await annulerCommande(id);
-    chargerCommandes();
   }
   if (loading) {
     return <p>Chargement...</p>;
