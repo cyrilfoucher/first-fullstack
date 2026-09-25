@@ -2,7 +2,7 @@
 
 **Autour du Monde** est mon premier projet full stack. C'est une application web autour du voyage qui permet de découvrir des destinations et d'acheter des guides de voyage.
 
-J'ai réalisé ce projet pour apprendre à construire une application complète : une interface React, une API Express, une base de données MongoDB, une authentification et un parcours de paiement.
+J'ai réalisé ce projet pour apprendre à construire une application complète : une interface React, une API Express, une base de données MongoDB, une authentification, un parcours de paiement, des tests, Docker et une chaîne CI/CD.
 
 ## Démo
 
@@ -40,8 +40,17 @@ Un espace administrateur permet également de gérer les produits et les command
 
 first-fullstack/
 ```
-├── frontend/    # Application React
-└── backend/     # API Express et modèles MongoDB
+├── .github/workflows/ci.yml  # Tests, vérifications et déploiement Render
+├── backend/                  # API Express, modèles et tests
+│   ├── Dockerfile
+│   ├── .dockerignore
+│   └── .env.example
+├── frontend/                 # Application React
+│   ├── Dockerfile
+│   ├── .dockerignore
+│   └── .env.example
+├── docker-compose.yml
+└── README.md
 ```
 
 Le frontend communique avec l'API via Axios. Le backend gère l'authentification, les produits, les commandes, les paiements et les e-mails.
@@ -65,7 +74,7 @@ npm install
 
 ## Variables d'environnement
 
-Crée un fichier `.env` dans chacun des dossiers concernés. Ne publie jamais ces fichiers ni tes clés API.
+Des fichiers `.env.example` indiquent les variables nécessaires. Crée un fichier `.env` dans chacun des dossiers concernés à partir de ces exemples. Ne publie jamais ces fichiers ni tes clés API.
 
 ### `backend/.env`
 
@@ -119,10 +128,31 @@ Le backend démarre par défaut sur `http://localhost:5001` et le frontend est g
 | `frontend` | `npm run dev` | Lance le frontend en développement. |
 | `frontend` | `npm run build` | Génère le build de production. |
 | `frontend` | `npm run lint` | Vérifie le code avec ESLint. |
+| `backend` | `npm test` | Lance les tests Vitest avec Supertest. |
+
+## Lancer le projet avec Docker
+
+À la racine du projet, après avoir créé les fichiers `.env` du backend et du frontend :
+
+```bash
+docker compose up --build
+```
+
+Le frontend est disponible sur `http://localhost:5173` et l'API sur `http://localhost:5001`. Docker Compose utilise les fichiers `.env` des deux dossiers et MongoDB reste hébergé sur MongoDB Atlas. Pour arrêter les conteneurs :
+
+```bash
+docker compose down
+```
+
+## Tests et intégration continue
+
+Le workflow GitHub Actions `.github/workflows/ci.yml` s'exécute à chaque push et pull request. Il lance les tests backend (Vitest et Supertest), vérifie le frontend avec ESLint et construit le frontend.
+
+Après la réussite de ces étapes, le workflow déclenche le déploiement du backend et du frontend sur Render. Les hooks de déploiement Render sont stockés dans les secrets GitHub `RENDER_BACKEND_DEPLOY_HOOK` et `RENDER_FRONTEND_DEPLOY_HOOK`. Le workflow utilise également le secret `STRIPE_SECRET_KEY` pour les tests backend, le secret `VITE_OPENWEATHER_API_KEY` et la variable `VITE_API_URL` pour le build frontend. Configure ces valeurs dans les paramètres **Secrets and variables** du dépôt GitHub ; ne les ajoute pas au dépôt.
 
 ## Déploiement
 
-L'application est déployée sur [Render](https://autour-du-monde.onrender.com/).
+L'application est déployée sur [Render](https://autour-du-monde.onrender.com/). Les déploiements du backend et du frontend sont déclenchés automatiquement par GitHub Actions après réussite des vérifications CI.
 
 ## Et ensuite ?
 
